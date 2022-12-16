@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form onsubmit="savetoLocal(event)">
+        <label>Name</label>
+        <input type="text" name="username" required />
+        <label> Email</label>
+        <input type="email" name="email" required />
+        <label>password</label>
+        <input type="password" name="pass" />
+        <button> submit</button>
+    </form>
+
+    <ul id="listofUsers"></ul>
+
+</body>
+
+<script>
+    function savetoLocal(event) {
+        event.preventDefault();
+        const username = event.target.username.value;
+        const email = event.target.email.value;
+        const password = event.target.pass.value;
+
+        const obj = {
+            username,
+            email,
+            password
+        }
+
+        localStorage.setItem(obj.email, JSON.stringify(obj));
+        showMeUser(obj);
+
+    }
+
+    function showMeUser(obj) {
+        const parentNode = document.getElementById('listofUsers');
+        const childNode = `<li> ${obj.username} - ${obj.email} </li>`;
+        parentNode.innerHTML = childNode;
+    }
+</script>
+
+</html>
