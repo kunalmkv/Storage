@@ -11,11 +11,11 @@
 <body>
     <form onsubmit="savetoLocal(event)">
         <label>Name</label>
-        <input type="text" name="username" required />
+        <input id='name' type="text" name="username" required />
         <label> Email</label>
-        <input type="email" name="emailId" required />
+        <input id="mail" type="email" name="emailId" required />
         <label>password</label>
-        <input type="password" name="pass" />
+        <input id="pass" type="password" name="pass" />
         <button> submit</button>
     </form>
 
@@ -51,11 +51,18 @@
         })
 
         function showMeUser(obj) {
-
+            document.getElementById('mail').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('pass').value = '';
+            if (localStorage.getItem(obj.email) !== null) {
+                removeFromScreen(obj.email);
+            }
 
             const parentNode = document.getElementById('listofUsers');
             const childNode = `<li id=${obj.email}> ${obj.username} - ${obj.email}  
-                <button onclick=deleteUser('${obj.email}')> Delete User </button> </li>`;
+                <button onclick=deleteUser('${obj.email}')> Delete User </button>
+                <button onclick=editUser('${obj.email}','${obj.username}','${obj.password}')> Edit </button>
+                  </li>`;
             parentNode.innerHTML = parentNode.innerHTML + childNode;
         }
         function deleteUser(emailId) {
@@ -64,11 +71,21 @@
             removeFromScreen(emailId);
 
         }
+        function editUser(emai, user, word) {
+            document.getElementById('mail').value = emai;
+            document.getElementById('name').value = user;
+            document.getElementById('pass').value = word;
+            deleteUser(emai);
+            removeFromScreen(emai);
 
-        function removeFromScreen(emailId) {
+        }
+
+        function removeFromScreen(emailId, userDetail) {
             const parent = document.getElementById('listofUsers');
-            const childtobeDeleted = document.getElementById(emailId)
-            parent.removeChild(childtobeDeleted);
+            const childtobeDeleted = document.getElementById(emailId);
+            if (childtobeDeleted) {
+                parent.removeChild(childtobeDeleted);
+            }
 
         }
     </script>
