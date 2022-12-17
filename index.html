@@ -13,39 +13,65 @@
         <label>Name</label>
         <input type="text" name="username" required />
         <label> Email</label>
-        <input type="email" name="email" required />
+        <input type="email" name="emailId" required />
         <label>password</label>
         <input type="password" name="pass" />
         <button> submit</button>
     </form>
 
     <ul id="listofUsers"></ul>
+    <script>
+        function savetoLocal(event) {
+            event.preventDefault();
+            const username = event.target.username.value;
+            const email = event.target.emailId.value;
+            const password = event.target.pass.value;
 
-</body>
+            const obj = {
+                username,
+                email,
+                password
+            }
 
-<script>
-    function savetoLocal(event) {
-        event.preventDefault();
-        const username = event.target.username.value;
-        const email = event.target.email.value;
-        const password = event.target.pass.value;
+            localStorage.setItem(obj.email, JSON.stringify(obj));
+            showMeUser(obj);
 
-        const obj = {
-            username,
-            email,
-            password
         }
 
-        localStorage.setItem(obj.email, JSON.stringify(obj));
-        showMeUser(obj);
+        window.addEventListener("DOMContentLoaded", () => {
+            const localStorageOBJ = localStorage;
+            const localStoragekeys = Object.keys(localStorageOBJ);
+            for (var i = 0; i < localStoragekeys.length; i++) {
+                const key = localStoragekeys[i];
+                const userDetails = localStorageOBJ[key];
+                const userDetailObj = JSON.parse(userDetails);
+                showMeUser(userDetailObj);
 
-    }
+            }
+        })
 
-    function showMeUser(obj) {
-        const parentNode = document.getElementById('listofUsers');
-        const childNode = `<li> ${obj.username} - ${obj.email} </li>`;
-        parentNode.innerHTML = childNode;
-    }
-</script>
+        function showMeUser(obj) {
+
+
+            const parentNode = document.getElementById('listofUsers');
+            const childNode = `<li id=${obj.email}> ${obj.username} - ${obj.email}  
+                <button onclick=deleteUser('${obj.email}')> Delete User </button> </li>`;
+            parentNode.innerHTML = parentNode.innerHTML + childNode;
+        }
+        function deleteUser(emailId) {
+            console.log(emailId)
+            localStorage.removeItem(emailId);
+            removeFromScreen(emailId);
+
+        }
+
+        function removeFromScreen(emailId) {
+            const parent = document.getElementById('listofUsers');
+            const childtobeDeleted = document.getElementById(emailId)
+            parent.removeChild(childtobeDeleted);
+
+        }
+    </script>
+</body>
 
 </html>
